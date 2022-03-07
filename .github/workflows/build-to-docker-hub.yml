@@ -5,6 +5,9 @@ on:
     types: [published]
     # branches:
     # - master
+  push:
+    branches:
+    - 06-03-22/build-on-release
 
 jobs:
   build:
@@ -12,7 +15,7 @@ jobs:
     steps:
       - name: Dump env
         run: env | sort
-      - name: Dump GitHub context
+      - name: Build Docker Image (${{ github.ref_name }})
         env:
           GITHUB_CONTEXT: ${{ toJson(github) }}
         run: echo "$GITHUB_CONTEXT"
