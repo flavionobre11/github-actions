@@ -3,20 +3,44 @@ name: Build to Docker Hub
 on:
   release:
     types: [published]
-    # branches:
-    # - master
-  push:
-    branches:
-    - 06-03-22/build-on-release
+  # push:
+  #   branches:
+  #   - 06-03-22/build-on-release
 
 jobs:
-  build:
+  push_image_docker_hub:
+    name: Push image to Docker Hub
     runs-on: ubuntu-latest
     steps:
-      - name: Dump env
-        run: env | sort
-      - name: Build Docker Image from ${{ github.event.release.name }}
+      - name: Checkout the repo...
+        uses: actions/checkout@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASS }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: fnobre11/teste-github-actions
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
         env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
           TAG: ${{ github.event.release.tag_name }}
-        run: echo "$GITHUB_CONTEXT >>> TAG $TAG"
+        with:
+          context: .
+          push: true
+          build-args: APP_VERSION=$TAG
+          file: Dockerfile.prod.yml
+          tags: fnobre11/teste-github-actions:$TAG
+      # - name: Dump env
+      #   run: env | sort
+      # - name: Build Docker Image from ${{ github.event.release.name }}
+      #   env:
+      #     GITHUB_CONTEXT: ${{ toJson(github) }}
+      #     TAG: ${{ github.event.release.tag_name }}
+      #   run: echo "$GITHUB_CONTEXT >>> TAG $TAG"
