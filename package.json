@@ -1,0 +1,19 @@
+{
+  "name": "github-actions",
+  "version": "1.0.0",
+  "description": "repositorio para armazenar estudos sobre github actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flavionobre11/github-actions.git"
+  },
+  "author": "flavio nobre",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flavionobre11/github-actions/issues"
+  },
+  "homepage": "https://github.com/flavionobre11/github-actions#readme"
+}
